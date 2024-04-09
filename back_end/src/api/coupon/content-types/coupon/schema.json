@@ -1,0 +1,43 @@
+{
+  "kind": "collectionType",
+  "collectionName": "coupons",
+  "info": {
+    "singularName": "coupon",
+    "pluralName": "coupons",
+    "displayName": "Coupon",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "coupon_id": {
+      "type": "uid",
+      "required": true
+    },
+    "coupon_code": {
+      "type": "string",
+      "required": true
+    },
+    "discount_amount": {
+      "type": "integer",
+      "required": true
+    },
+    "expira_date": {
+      "type": "datetime",
+      "required": true
+    },
+    "promotion": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::promotion.promotion"
+    },
+    "shopping_cart": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::shopping-cart.shopping-cart",
+      "mappedBy": "coupon"
+    }
+  }
+}

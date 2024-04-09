@@ -1,0 +1,42 @@
+{
+  "kind": "collectionType",
+  "collectionName": "promotions",
+  "info": {
+    "singularName": "promotion",
+    "pluralName": "promotions",
+    "displayName": "Promotion"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "promotion_id": {
+      "type": "uid",
+      "required": true
+    },
+    "promotion_name": {
+      "type": "string",
+      "required": true
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "free shipping",
+        "percentage off",
+        "fixed amount off"
+      ],
+      "required": true,
+      "default": "free shipping"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "happen",
+        "finish"
+      ],
+      "required": true,
+      "default": "happen"
+    }
+  }
+}

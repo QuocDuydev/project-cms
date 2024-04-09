@@ -1,0 +1,32 @@
+{
+  "kind": "collectionType",
+  "collectionName": "page_statics",
+  "info": {
+    "singularName": "page-static",
+    "pluralName": "page-statics",
+    "displayName": "PageStatic"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "page_id": {
+      "type": "uid",
+      "required": true
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "content": {
+      "type": "text",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
+    }
+  }
+}
