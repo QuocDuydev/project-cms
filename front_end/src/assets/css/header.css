@@ -1,0 +1,7 @@
+.top-menu {
+  width: 400px;
+  position: absolute;
+}
+
+@media (max-width: 767px) {
+}
