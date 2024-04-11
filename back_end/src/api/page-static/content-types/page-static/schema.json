@@ -4,17 +4,14 @@
   "info": {
     "singularName": "page-static",
     "pluralName": "page-statics",
-    "displayName": "PageStatic"
+    "displayName": "PageStatic",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
   },
   "pluginOptions": {},
   "attributes": {
-    "page_id": {
-      "type": "uid",
-      "required": true
-    },
     "title": {
       "type": "string",
       "required": true

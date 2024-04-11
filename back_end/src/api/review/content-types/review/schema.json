@@ -12,10 +12,6 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "review_id": {
-      "type": "uid",
-      "required": true
-    },
     "rating": {
       "type": "integer",
       "required": true

@@ -12,18 +12,15 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "cart_id": {
-      "type": "uid",
-      "required": true
-    },
     "total_price": {
       "type": "float",
       "required": true
     },
     "products": {
       "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::product.product"
+      "relation": "oneToMany",
+      "target": "api::product.product",
+      "mappedBy": "shopping_cart"
     },
     "coupon": {
       "type": "relation",
@@ -35,6 +32,11 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user"
+    },
+    "quanlity": {
+      "type": "integer",
+      "required": true,
+      "default": 1
     }
   }
 }

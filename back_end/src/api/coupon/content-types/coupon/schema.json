@@ -12,10 +12,6 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "coupon_id": {
-      "type": "uid",
-      "required": true
-    },
     "coupon_code": {
       "type": "string",
       "required": true

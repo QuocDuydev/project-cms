@@ -1,18 +1,17 @@
 {
   "kind": "collectionType",
-  "collectionName": "brands",
+  "collectionName": "subcategories",
   "info": {
-    "singularName": "brand",
-    "pluralName": "brands",
-    "displayName": "Brand",
-    "description": ""
+    "singularName": "subcategory",
+    "pluralName": "subcategories",
+    "displayName": "Subcategory"
   },
   "options": {
     "draftAndPublish": true
   },
   "pluginOptions": {},
   "attributes": {
-    "brand_name": {
+    "subcategory_name": {
       "type": "string",
       "required": true
     },
@@ -20,13 +19,13 @@
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::category.category",
-      "inversedBy": "brands"
+      "inversedBy": "subcategories"
     },
-    "products": {
+    "sub_subcategories": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::product.product",
-      "mappedBy": "brand"
+      "target": "api::sub-subcategory.sub-subcategory",
+      "mappedBy": "subcategory"
     }
   }
 }

@@ -12,10 +12,6 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "product_id": {
-      "type": "uid",
-      "required": true
-    },
     "product_name": {
       "type": "string",
       "required": true
@@ -24,42 +20,8 @@
       "type": "text",
       "required": true
     },
-    "color": {
-      "type": "enumeration",
-      "enum": [
-        "white",
-        "black",
-        "red",
-        "green",
-        "blue",
-        "yellow"
-      ],
-      "required": true
-    },
-    "size": {
-      "type": "enumeration",
-      "enum": [
-        "S",
-        "M",
-        "L",
-        "XL",
-        "XXL",
-        "XXXL"
-      ],
-      "required": true
-    },
-    "category": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::category.category",
-      "inversedBy": "products"
-    },
     "price": {
       "type": "float",
-      "required": true
-    },
-    "stocklevel": {
-      "type": "integer",
       "required": true
     },
     "reviews": {
@@ -68,13 +30,29 @@
       "target": "api::review.review",
       "mappedBy": "products"
     },
-    "product_image": {
-      "type": "media",
-      "multiple": true,
-      "required": true,
-      "allowedTypes": [
-        "images"
-      ]
+    "brand": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::brand.brand",
+      "inversedBy": "products"
+    },
+    "product_images": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::product-image.product-image",
+      "mappedBy": "product"
+    },
+    "inventories": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::inventory.inventory",
+      "mappedBy": "product"
+    },
+    "shopping_cart": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::shopping-cart.shopping-cart",
+      "inversedBy": "products"
     }
   }
 }

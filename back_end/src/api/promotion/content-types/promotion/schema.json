@@ -4,17 +4,14 @@
   "info": {
     "singularName": "promotion",
     "pluralName": "promotions",
-    "displayName": "Promotion"
+    "displayName": "Promotion",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
   },
   "pluginOptions": {},
   "attributes": {
-    "promotion_id": {
-      "type": "uid",
-      "required": true
-    },
     "promotion_name": {
       "type": "string",
       "required": true

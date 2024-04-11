@@ -34,6 +34,7 @@ export const AuthProvider = ({ children }) => {
         setAuthTokens(data);
         setUser(jwtDecode(data.jwt));
         localStorage.setItem("jwt", JSON.stringify(data));
+        alert("Login Successfully!");
         navigate("/");
       } else {
         alert("Login failed !");

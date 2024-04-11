@@ -799,17 +799,22 @@ export interface ApiBrandBrand extends Schema.CollectionType {
     singularName: 'brand';
     pluralName: 'brands';
     displayName: 'Brand';
+    description: '';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
-    brand_id: Attribute.UID & Attribute.Required;
     brand_name: Attribute.String & Attribute.Required;
-    categories: Attribute.Relation<
+    category: Attribute.Relation<
+      'api::brand.brand',
+      'manyToOne',
+      'api::category.category'
+    >;
+    products: Attribute.Relation<
       'api::brand.brand',
       'oneToMany',
-      'api::category.category'
+      'api::product.product'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -841,17 +846,16 @@ export interface ApiCategoryCategory extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    category_id: Attribute.UID & Attribute.Required;
     category_name: Attribute.String & Attribute.Required;
-    products: Attribute.Relation<
-      'api::category.category',
-      'oneToMany',
-      'api::product.product'
-    >;
     brands: Attribute.Relation<
       'api::category.category',
-      'manyToOne',
+      'oneToMany',
       'api::brand.brand'
+    >;
+    subcategories: Attribute.Relation<
+      'api::category.category',
+      'oneToMany',
+      'api::subcategory.subcategory'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -883,7 +887,6 @@ export interface ApiCouponCoupon extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    coupon_id: Attribute.UID & Attribute.Required;
     coupon_code: Attribute.String & Attribute.Required;
     discount_amount: Attribute.Integer & Attribute.Required;
     expira_date: Attribute.DateTime & Attribute.Required;
@@ -915,18 +918,55 @@ export interface ApiCouponCoupon extends Schema.CollectionType {
   };
 }
 
+export interface ApiInventoryInventory extends Schema.CollectionType {
+  collectionName: 'inventories';
+  info: {
+    singularName: 'inventory';
+    pluralName: 'inventories';
+    displayName: 'Inventory';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    inventory_name: Attribute.String & Attribute.Required;
+    location: Attribute.String & Attribute.Required;
+    quanlity: Attribute.Integer & Attribute.Required;
+    product: Attribute.Relation<
+      'api::inventory.inventory',
+      'manyToOne',
+      'api::product.product'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::inventory.inventory',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::inventory.inventory',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiPageStaticPageStatic extends Schema.CollectionType {
   collectionName: 'page_statics';
   info: {
     singularName: 'page-static';
     pluralName: 'page-statics';
     displayName: 'PageStatic';
+    description: '';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
-    page_id: Attribute.UID & Attribute.Required;
     title: Attribute.String & Attribute.Required;
     content: Attribute.Text & Attribute.Required;
     slug: Attribute.UID<'api::page-static.page-static', 'title'> &
@@ -961,28 +1001,34 @@ export interface ApiProductProduct extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    product_id: Attribute.UID & Attribute.Required;
     product_name: Attribute.String & Attribute.Required;
     descriptions: Attribute.Text & Attribute.Required;
-    color: Attribute.Enumeration<
-      ['white', 'black', 'red', 'green', 'blue', 'yellow']
-    > &
-      Attribute.Required;
-    size: Attribute.Enumeration<['S', 'M', 'L', 'XL', 'XXL', 'XXXL']> &
-      Attribute.Required;
-    category: Attribute.Relation<
-      'api::product.product',
-      'manyToOne',
-      'api::category.category'
-    >;
     price: Attribute.Float & Attribute.Required;
-    stocklevel: Attribute.Integer & Attribute.Required;
     reviews: Attribute.Relation<
       'api::product.product',
       'oneToMany',
       'api::review.review'
     >;
-    product_image: Attribute.Media & Attribute.Required;
+    brand: Attribute.Relation<
+      'api::product.product',
+      'manyToOne',
+      'api::brand.brand'
+    >;
+    product_images: Attribute.Relation<
+      'api::product.product',
+      'oneToMany',
+      'api::product-image.product-image'
+    >;
+    inventories: Attribute.Relation<
+      'api::product.product',
+      'oneToMany',
+      'api::inventory.inventory'
+    >;
+    shopping_cart: Attribute.Relation<
+      'api::product.product',
+      'manyToOne',
+      'api::shopping-cart.shopping-cart'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1001,18 +1047,60 @@ export interface ApiProductProduct extends Schema.CollectionType {
   };
 }
 
+export interface ApiProductImageProductImage extends Schema.CollectionType {
+  collectionName: 'product_images';
+  info: {
+    singularName: 'product-image';
+    pluralName: 'product-images';
+    displayName: 'Product_image';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    image_name: Attribute.String & Attribute.Required;
+    image_url: Attribute.Media & Attribute.Required;
+    color: Attribute.Enumeration<
+      ['white', 'black', 'red', 'green', 'blue', 'yellow']
+    > &
+      Attribute.Required;
+    size: Attribute.Enumeration<['S', 'M', 'L', 'XL', 'XXL', 'XXXL']> &
+      Attribute.Required;
+    product: Attribute.Relation<
+      'api::product-image.product-image',
+      'manyToOne',
+      'api::product.product'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::product-image.product-image',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::product-image.product-image',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiPromotionPromotion extends Schema.CollectionType {
   collectionName: 'promotions';
   info: {
     singularName: 'promotion';
     pluralName: 'promotions';
     displayName: 'Promotion';
+    description: '';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
-    promotion_id: Attribute.UID & Attribute.Required;
     promotion_name: Attribute.String & Attribute.Required;
     type: Attribute.Enumeration<
       ['free shipping', 'percentage off', 'fixed amount off']
@@ -1052,7 +1140,6 @@ export interface ApiReviewReview extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    review_id: Attribute.UID & Attribute.Required;
     rating: Attribute.Integer & Attribute.Required;
     review_text: Attribute.Text & Attribute.Required;
     review_date: Attribute.DateTime & Attribute.Required;
@@ -1100,11 +1187,10 @@ export interface ApiShoppingCartShoppingCart extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    cart_id: Attribute.UID & Attribute.Required;
     total_price: Attribute.Float & Attribute.Required;
     products: Attribute.Relation<
       'api::shopping-cart.shopping-cart',
-      'oneToOne',
+      'oneToMany',
       'api::product.product'
     >;
     coupon: Attribute.Relation<
@@ -1117,6 +1203,7 @@ export interface ApiShoppingCartShoppingCart extends Schema.CollectionType {
       'oneToOne',
       'plugin::users-permissions.user'
     >;
+    quanlity: Attribute.Integer & Attribute.Required & Attribute.DefaultTo<1>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1128,6 +1215,81 @@ export interface ApiShoppingCartShoppingCart extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::shopping-cart.shopping-cart',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiSubSubcategorySubSubcategory extends Schema.CollectionType {
+  collectionName: 'sub_subcategories';
+  info: {
+    singularName: 'sub-subcategory';
+    pluralName: 'sub-subcategories';
+    displayName: 'Sub-subcategory';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    sub_subcategory_name: Attribute.String & Attribute.Required;
+    subcategory: Attribute.Relation<
+      'api::sub-subcategory.sub-subcategory',
+      'manyToOne',
+      'api::subcategory.subcategory'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::sub-subcategory.sub-subcategory',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::sub-subcategory.sub-subcategory',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiSubcategorySubcategory extends Schema.CollectionType {
+  collectionName: 'subcategories';
+  info: {
+    singularName: 'subcategory';
+    pluralName: 'subcategories';
+    displayName: 'Subcategory';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    subcategory_name: Attribute.String & Attribute.Required;
+    category: Attribute.Relation<
+      'api::subcategory.subcategory',
+      'manyToOne',
+      'api::category.category'
+    >;
+    sub_subcategories: Attribute.Relation<
+      'api::subcategory.subcategory',
+      'oneToMany',
+      'api::sub-subcategory.sub-subcategory'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::subcategory.subcategory',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::subcategory.subcategory',
       'oneToOne',
       'admin::user'
     > &
@@ -1156,11 +1318,15 @@ declare module '@strapi/types' {
       'api::brand.brand': ApiBrandBrand;
       'api::category.category': ApiCategoryCategory;
       'api::coupon.coupon': ApiCouponCoupon;
+      'api::inventory.inventory': ApiInventoryInventory;
       'api::page-static.page-static': ApiPageStaticPageStatic;
       'api::product.product': ApiProductProduct;
+      'api::product-image.product-image': ApiProductImageProductImage;
       'api::promotion.promotion': ApiPromotionPromotion;
       'api::review.review': ApiReviewReview;
       'api::shopping-cart.shopping-cart': ApiShoppingCartShoppingCart;
+      'api::sub-subcategory.sub-subcategory': ApiSubSubcategorySubSubcategory;
+      'api::subcategory.subcategory': ApiSubcategorySubcategory;
     }
   }
 }
